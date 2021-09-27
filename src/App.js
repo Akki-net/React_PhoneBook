@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', id: 1}
+    { name: 'Arto Hellas'}
   ]);
   const [ newName, setNewName ] = useState('');
 
@@ -13,9 +13,22 @@ const App = () => {
 
   const submitHandler = Event => {
     Event.preventDefault();
+
+    try{
+      persons.forEach(p => {
+        if(newName === p.name){
+          alert(`${newName} is already to phonebook`);
+          throw "exit";
+        }
+      });
+    }
+    catch(err){
+      setNewName('');
+      return;
+    }
+
     const newPerson = {
-      name: newName,
-      id: persons.length + 1
+      name: newName
     };
     setPersons(persons.concat(newPerson));
     setNewName('');
@@ -33,7 +46,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(p => <p key={p.id}> {p.name} </p>)}
+      {persons.map(p => <p key={p.name}> {p.name} </p>)}
     </div>
   )
 }
