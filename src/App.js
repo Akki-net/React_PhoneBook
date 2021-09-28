@@ -65,11 +65,11 @@ const App = () => {
   }); 
 
   return (
-    <div>
-      <h2>Phonebook</h2>
+    <div className="container bg-info pt-3 mt-3 rounded">
+      <h2 className="bg-dark text-info p-2">Phonebook</h2>
       <Filter handler={filterHandler} val={newSearch} />
 
-      <h3>Add a new</h3>
+      <h3 className="mt-2">Add a new</h3>
       <PersonForm handler={submitHandler} subHandler={changeHandler} name={newName} number={newNumber} />
       
       <h3>Numbers</h3>

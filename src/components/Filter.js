@@ -1,5 +1,5 @@
 import React from 'react';
 
-const Filter = ({ handler,val }) => <input onChange={handler} value={val} />
+const Filter = ({ handler,val }) => <input className="form-control" onChange={handler} value={val} />
 
 export default Filter;
