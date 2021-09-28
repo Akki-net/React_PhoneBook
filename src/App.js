@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
+import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas',
-      number: '9645-859868'    
-  }
+    { name: 'Arto Hellas', number: '9040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '3944-323523', id: 2 },
+    { name: 'Dan Abramov', number: '1243-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '3923-423122', id: 4 }
   ]);
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
@@ -41,7 +45,8 @@ const App = () => {
 
     const newPerson = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: persons.length + 1
     };
     setPersons(persons.concat(newPerson));
     setNewName('');
@@ -55,7 +60,6 @@ const App = () => {
   const filteredList = newSearch === '' ? persons : persons.filter(p => {
     let word = new RegExp(newSearch, 'i');
     if(p.name.search(word) !== -1){
-      console.log("hrlo");
       return p;
     }
   }); 
@@ -63,21 +67,13 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <input onChange={filterHandler} value={newSearch} />
-      <form onSubmit={submitHandler}>
-        <h2>add a new</h2>
-        <div>
-          name: <input onChange={changeHandler} placeholder="XYZ " name="pName" value={newName} />
-        </div>
-        <div>
-          number: <input  pattern="[0-9]{4}-[0-9]{6}" placeholder="1234-101010" maxLength="11" name="pNumber" value={newNumber} onChange={changeHandler} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {filteredList.map(p => <p key={p.name}> {p.name}   {p.number} </p>)}
+      <Filter handler={filterHandler} val={newSearch} />
+
+      <h3>Add a new</h3>
+      <PersonForm handler={submitHandler} subHandler={changeHandler} name={newName} number={newNumber} />
+      
+      <h3>Numbers</h3>
+      <Persons persons={filteredList} />
     </div>
   )
 }
