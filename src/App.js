@@ -8,6 +8,7 @@ const App = () => {
   ]);
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
+  const [ newSearch, setNewSearch ] = useState('');
 
   const changeHandler = (Event) => {
     let nam = Event.target.name;
@@ -34,6 +35,7 @@ const App = () => {
     }
     catch(err){
       setNewName('');
+      setNewNumber('');
       return;
     }
 
@@ -46,10 +48,24 @@ const App = () => {
     setNewNumber('');    
   };
 
+  const filterHandler = Event => {
+    setNewSearch(Event.target.value);
+  };
+
+  const filteredList = newSearch === '' ? persons : persons.filter(p => {
+    let word = new RegExp(newSearch, 'i');
+    if(p.name.search(word) !== -1){
+      console.log("hrlo");
+      return p;
+    }
+  }); 
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <input onChange={filterHandler} value={newSearch} />
       <form onSubmit={submitHandler}>
+        <h2>add a new</h2>
         <div>
           name: <input onChange={changeHandler} placeholder="XYZ " name="pName" value={newName} />
         </div>
@@ -61,7 +77,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(p => <p key={p.name}> {p.name}   {p.number} </p>)}
+      {filteredList.map(p => <p key={p.name}> {p.name}   {p.number} </p>)}
     </div>
   )
 }
