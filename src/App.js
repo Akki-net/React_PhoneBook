@@ -2,13 +2,23 @@ import React, { useState } from 'react'
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas'}
+    { name: 'Arto Hellas',
+      number: '9645-859868'    
+  }
   ]);
   const [ newName, setNewName ] = useState('');
+  const [ newNumber, setNewNumber ] = useState('');
 
   const changeHandler = (Event) => {
-    let name = Event.target.value;
-    setNewName(name);
+    let nam = Event.target.name;
+    let val = Event.target.value;
+    if(nam === "pName"){
+      setNewName(val);
+    }
+    else{
+      setNewNumber(val);
+    }
+  
   };
 
   const submitHandler = Event => {
@@ -28,10 +38,12 @@ const App = () => {
     }
 
     const newPerson = {
-      name: newName
+      name: newName,
+      number: newNumber
     };
     setPersons(persons.concat(newPerson));
     setNewName('');
+    setNewNumber('');    
   };
 
   return (
@@ -39,14 +51,17 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={submitHandler}>
         <div>
-          name: <input onChange={changeHandler} value={newName} />
+          name: <input onChange={changeHandler} placeholder="XYZ " name="pName" value={newName} />
+        </div>
+        <div>
+          number: <input  pattern="[0-9]{4}-[0-9]{6}" placeholder="1234-101010" maxLength="11" name="pNumber" value={newNumber} onChange={changeHandler} />
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(p => <p key={p.name}> {p.name} </p>)}
+      {persons.map(p => <p key={p.name}> {p.name}   {p.number} </p>)}
     </div>
   )
 }
