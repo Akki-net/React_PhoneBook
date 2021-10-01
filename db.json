@@ -1,26 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "9040-123456",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "3944-323523",
-      "id": 2
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "1243-234345",
-      "id": 3
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "3923-623122",
-      "id": 4
-    },
-    {
       "name": "Akash Sharma",
       "number": "9625-703834",
       "id": 5
@@ -29,6 +9,16 @@
       "name": "Nidhi Sharma",
       "number": "7678-400118",
       "id": 6
+    },
+    {
+      "name": "Vivek Tiwari",
+      "number": "8700-932628",
+      "id": 7
+    },
+    {
+      "name": "Anshu Tiwari",
+      "number": "6700-136878",
+      "id": 8
     }
   ]
 }
