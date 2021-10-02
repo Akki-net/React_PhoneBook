@@ -32,19 +32,15 @@ const App = () => {
       name: newName,
       number: newNumber
     };
-    let result;
+    let result = false, addOrNot = false;
     persons.forEach(p => {
       if(p.name === newName) {
-      result = window.confirm(`${newName} is already added to phonebook, want to replace with new one?`)
+        result = window.confirm(`${newName} is already added to phonebook, want to replace with new one?`)
       }
-    });
-
-    let addOrNot = false;
-    persons.forEach(p => {
-      if(p.name !== newName){
+      else{
         addOrNot = true;
       }
-    })
+    });
     
     if(addOrNot){
     personServices.create(newPerson)
@@ -63,10 +59,11 @@ const App = () => {
               const id = l.id;
              personServices.update(id, newPerson)
             .then(updatedItem => {
-             setPersons(persons.map(val => val.id!==id ? val : updatedItem));
+             setPersons(persons.map(val => val.name!==newName ? val : updatedItem));
                setNewName('');
                setNewNumber('');
-              })
+              });
+              personServices.del(id);
             }
         });
       });

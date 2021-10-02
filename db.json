@@ -1,34 +1,14 @@
 {
   "persons": [
     {
-      "name": "Akash Sharma",
-      "number": "6700-136878",
-      "id": 5
-    },
-    {
-      "name": "Nidhi Sharma",
-      "number": "7678-400118",
-      "id": 6
-    },
-    {
       "name": "Vivek Tiwari",
       "number": "8700-932628",
       "id": 7
     },
     {
-      "name": "Anshu Tiwari",
-      "number": "8569-488742",
-      "id": 8
-    },
-    {
       "name": "Akash Sharma",
-      "number": "6700-136878",
+      "number": "1236-965854",
       "id": 9
-    },
-    {
-      "name": "Anshu Tiwari",
-      "number": "8569-488742",
-      "id": 10
     }
   ]
 }
