@@ -28,32 +28,50 @@ const App = () => {
 
   const submitHandler = Event => {
     Event.preventDefault();
-
-    try{
-      persons.forEach(p => {
-        if(newName === p.name){
-          alert(`${newName} is already to phonebook`);
-          throw "exit";
-        }
-      });
-    }
-    catch(err){
-      setNewName('');
-      setNewNumber('');
-      return;
-    }
-
     const newPerson = {
       name: newName,
       number: newNumber
     };
+    let result;
+    persons.forEach(p => {
+      if(p.name === newName) {
+      result = window.confirm(`${newName} is already added to phonebook, want to replace with new one?`)
+      }
+    });
 
+    let addOrNot = false;
+    persons.forEach(p => {
+      if(p.name !== newName){
+        addOrNot = true;
+      }
+    })
+    
+    if(addOrNot){
     personServices.create(newPerson)
-    .then(addedPerson => {
-      setPersons(persons.concat(addedPerson));
+    .then(newObj => {
+      setPersons(persons.concat(newObj));
       setNewName('');
       setNewNumber('');
-    })
+    }) 
+  }
+  
+    if(result){
+      personServices.getAll().then(rList => {
+        rList.forEach(l => {
+          if(l.name === newName)
+            {
+              const id = l.id;
+             personServices.update(id, newPerson)
+            .then(updatedItem => {
+             setPersons(persons.map(val => val.id!==id ? val : updatedItem));
+               setNewName('');
+               setNewNumber('');
+              })
+            }
+        });
+      });
+    } 
+  
   };
 
   const filterHandler = Event => {
