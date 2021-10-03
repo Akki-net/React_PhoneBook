@@ -10,6 +10,8 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('');
   const [ newSearch, setNewSearch ] = useState('');
   const [ addOrNot, setAddOrNot ] = useState(false);
+  const [ addNew, setAddNew ] = useState('');
+  const [ errMsg, setErrMsg ] = useState('');
 
   const changeHandler = (Event) => {
     let nam = Event.target.name;
@@ -35,8 +37,8 @@ const App = () => {
     };
     
     persons.forEach(p => {
-      let result = false;
       if(p.name === newName) {
+        let result = false;
         result = window.confirm(`${newName} is already added to phonebook, want to replace with new one?`);
         if(result){
           personServices.getAll().then(rList => {
@@ -47,14 +49,22 @@ const App = () => {
                  personServices.update(id, newPerson)
                 .then(updatedItem => {
                  setPersons(persons.map(val => val.name!==newName ? val : updatedItem));
-                   setNewName('');
+                 setAddOrNot(false);
+                 setAddNew(`Changed ${newName}`);  
+                 setNewName('');
                    setNewNumber('');
+                  }).catch(error => {
+                    const msg = `Information of ${l.name} has already been removed`;
+                    setErrMsg(msg);
+                    setPersons(persons.map(p => p.name!== l.name));
+                    setTimeout(()=> setErrMsg(''), 5000);
                   });
                 }
             });
           });
         }
         else{
+          console.log('checked');
          setAddOrNot(false);
          setNewName('');
          setNewNumber('')
@@ -70,11 +80,11 @@ const App = () => {
     if(addOrNot){
       personServices.create(newPerson)
       .then(newObj => {
-        console.log(addOrNot,"check");
         setPersons(persons.concat(newObj));
+        setAddNew(`Added ${newObj.name}`);
         setNewName('');
         setNewNumber('');
-      }) 
+      });
     }
     
   
@@ -93,6 +103,8 @@ const App = () => {
 
   return (
     <div className="container bg-info pt-3 mt-3 rounded">
+      {errMsg}
+      {addNew}
       <h2 className="bg-dark text-info p-2">Phonebook</h2>
       <Filter handler={filterHandler} val={newSearch} />
 

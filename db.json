@@ -2,7 +2,7 @@
   "persons": [
     {
       "name": "Akash Sharma",
-      "number": "8569-488742",
+      "number": "7678-400118",
       "id": 5
     },
     {
@@ -17,18 +17,13 @@
     },
     {
       "name": "Vivek Tiwari",
-      "number": "6700-136878",
+      "number": "9625-703834",
       "id": 8
     },
     {
       "name": "Bimla Devi",
-      "number": "9625-703834",
+      "number": "8569-488742",
       "id": 9
-    },
-    {
-      "name": "Akash Sharma",
-      "number": "7678-400118",
-      "id": 10
     }
   ]
 }
