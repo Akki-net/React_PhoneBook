@@ -9,6 +9,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ newSearch, setNewSearch ] = useState('');
+  const [ addOrNot, setAddOrNot ] = useState(false);
 
   const changeHandler = (Event) => {
     let nam = Event.target.name;
@@ -32,42 +33,50 @@ const App = () => {
       name: newName,
       number: newNumber
     };
-    let result = false, addOrNot = false;
+    
     persons.forEach(p => {
+      let result = false;
       if(p.name === newName) {
-        result = window.confirm(`${newName} is already added to phonebook, want to replace with new one?`)
+        result = window.confirm(`${newName} is already added to phonebook, want to replace with new one?`);
+        if(result){
+          personServices.getAll().then(rList => {
+            rList.forEach(l => {
+              if(l.name === newName)
+                {
+                  const id = l.id;
+                 personServices.update(id, newPerson)
+                .then(updatedItem => {
+                 setPersons(persons.map(val => val.name!==newName ? val : updatedItem));
+                   setNewName('');
+                   setNewNumber('');
+                  });
+                }
+            });
+          });
+        }
+        else{
+         setAddOrNot(false);
+         setNewName('');
+         setNewNumber('')
+        }
       }
       else{
-        addOrNot = true;
+        setAddOrNot(true)
       }
     });
-    
+   
+     
+
     if(addOrNot){
-    personServices.create(newPerson)
-    .then(newObj => {
-      setPersons(persons.concat(newObj));
-      setNewName('');
-      setNewNumber('');
-    }) 
-  }
-  
-    if(result){
-      personServices.getAll().then(rList => {
-        rList.forEach(l => {
-          if(l.name === newName)
-            {
-              const id = l.id;
-             personServices.update(id, newPerson)
-            .then(updatedItem => {
-             setPersons(persons.map(val => val.name!==newName ? val : updatedItem));
-               setNewName('');
-               setNewNumber('');
-              });
-              personServices.del(id);
-            }
-        });
-      });
-    } 
+      personServices.create(newPerson)
+      .then(newObj => {
+        console.log(addOrNot,"check");
+        setPersons(persons.concat(newObj));
+        setNewName('');
+        setNewNumber('');
+      }) 
+    }
+    
   
   };
 
