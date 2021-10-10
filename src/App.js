@@ -31,19 +31,20 @@ const App = () => {
 
   const submitHandler = Event => {
     Event.preventDefault();
+  
     const newPerson = {
       name: newName,
       number: newNumber
-    };
+    }; 
     
     persons.forEach(p => {
+      let result = false;
       if(p.name === newName) {
-        let result = false;
         result = window.confirm(`${newName} is already added to phonebook, want to replace with new one?`);
         if(result){
           personServices.getAll().then(rList => {
             rList.forEach(l => {
-              if(l.name === newName)
+              if(l.name === newName && newNumber)
                 {
                   const id = l.id;
                  personServices.update(id, newPerson)
@@ -55,8 +56,8 @@ const App = () => {
                   }).catch(error => {
                     const msg = `Information of ${l.name} has already been removed`;
                     setErrMsg(msg);
-                    setPersons(persons.map(p => p.name!== l.name));
-                    (setTimeout(()=> setErrMsg(''), 3000))();
+                    setTimeout(()=> setErrMsg(null), 3000);
+                    setPersons(persons.filter(p => p.id!== id));
                   });
                 }
             });
@@ -67,21 +68,26 @@ const App = () => {
          setNewNumber('')
         }
       }
-      else{
-        personServices.create(newPerson)
-        .then(newObj => {
-        setPersons(persons.concat(newObj));
-        setAddNew(`Added ${newObj.name}`);
-        setNewName('');
-        setNewNumber('');
-      })
-      .catch(error => {
-        console.log(error.response.data);
-        setErrMsg(Object.values(error.response.data));
-      })
-      }
     });
 
+    const ack = persons.filter(p => p.name !== newName);
+    if(ack){
+      personServices.create(newPerson)
+      .then(newObj => {
+      setPersons(persons.concat(newObj));
+      setAddNew(`Added ${newObj.name}`);
+      setNewName('');
+      setNewNumber('');
+    })
+    .catch(error => {
+      console.log(error.response.data);
+      setAddNew('');
+      setErrMsg(Object.values(error.response.data));
+      setTimeout(()=> setErrMsg(''), 3000);
+      setNewName('');
+      setNewNumber('');
+    })
+    }
   };
 
   const filterHandler = Event => {
@@ -96,7 +102,7 @@ const App = () => {
   }); 
 
   return (
-    <div className="container bg-info pt-3 mt-3 rounded">
+    <div className="container bg-info mt-3 pt-3 rounded">
       <h2 className="bg-dark text-info p-2">Phonebook</h2>
      <Notification error={errMsg} nml={addNew} />
       <Filter handler={filterHandler} val={newSearch} />
