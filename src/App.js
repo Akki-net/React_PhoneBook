@@ -3,13 +3,13 @@ import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import personServices from './services/persons';
+import Notification from './components/Notification';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]); 
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ newSearch, setNewSearch ] = useState('');
-  const [ addOrNot, setAddOrNot ] = useState(false);
   const [ addNew, setAddNew ] = useState('');
   const [ errMsg, setErrMsg ] = useState('');
 
@@ -49,45 +49,39 @@ const App = () => {
                  personServices.update(id, newPerson)
                 .then(updatedItem => {
                  setPersons(persons.map(val => val.name!==newName ? val : updatedItem));
-                 setAddOrNot(false);
-                 setAddNew(`Changed ${newName}`);  
+                  setAddNew(`Changed ${newName}`);  
                  setNewName('');
                    setNewNumber('');
                   }).catch(error => {
                     const msg = `Information of ${l.name} has already been removed`;
                     setErrMsg(msg);
                     setPersons(persons.map(p => p.name!== l.name));
-                    setTimeout(()=> setErrMsg(''), 5000);
+                    (setTimeout(()=> setErrMsg(''), 3000))();
                   });
                 }
             });
           });
         }
         else{
-          console.log('checked');
-         setAddOrNot(false);
          setNewName('');
          setNewNumber('')
         }
       }
       else{
-        setAddOrNot(true)
-      }
-    });
-   
-     
-
-    if(addOrNot){
-      personServices.create(newPerson)
-      .then(newObj => {
+        personServices.create(newPerson)
+        .then(newObj => {
         setPersons(persons.concat(newObj));
         setAddNew(`Added ${newObj.name}`);
         setNewName('');
         setNewNumber('');
-      });
-    }
-    
-  
+      })
+      .catch(error => {
+        console.log(error.response.data);
+        setErrMsg(Object.values(error.response.data));
+      })
+      }
+    });
+
   };
 
   const filterHandler = Event => {
@@ -103,11 +97,9 @@ const App = () => {
 
   return (
     <div className="container bg-info pt-3 mt-3 rounded">
-      {errMsg}
-      {addNew}
       <h2 className="bg-dark text-info p-2">Phonebook</h2>
+     <Notification error={errMsg} nml={addNew} />
       <Filter handler={filterHandler} val={newSearch} />
-
       <h3 className="mt-2">Add a new</h3>
       <PersonForm handler={submitHandler} subHandler={changeHandler} name={newName} number={newNumber} />
       
